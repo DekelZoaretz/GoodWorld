@@ -8,6 +8,8 @@ import android.view.MenuItem;
 
 public class MainActivity extends ActionBarActivity {
 
+    private String a = "Ofir";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
