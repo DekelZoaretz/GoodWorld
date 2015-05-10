@@ -1,41 +1,73 @@
 package com.example.dekel.goodworld;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
-    private String a = "Ofir";
+    private final String TAG = "DekelMain";
+    Context context;
+
+    class Layout{
+
+        Button btnSnd;
+        Button btnHistory;
+
+        private Layout(){
+
+            btnSnd = (Button)findViewById(R.id.btnSMS);
+            btnHistory = (Button)findViewById(R.id.btnHistory);
+
+        }
+
+    }
+
+    class Events{
+
+
+        private Events(){
+
+            layout.btnSnd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i(TAG, "Send button has been clicked");
+                }
+            });
+
+            layout.btnHistory.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i(TAG, "History button has been clicked");
+                }
+            });
+        }
+    }
+
+    Layout layout;
+    Events events;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initilize();
+
+        //Check if the database is exist
+        //If yes, load the data
+        //If not create the data base
     }
 
+    private void initilize(){
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        layout = new Layout();
+        events = new Events();
+
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }
