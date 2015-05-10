@@ -2,6 +2,7 @@ package com.example.dekel.goodworld;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,6 +45,7 @@ public class MainActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     Log.i(TAG, "History button has been clicked");
+                    switchToHistory("History");
                 }
             });
             layout.btnSettings.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +77,23 @@ public class MainActivity extends Activity {
         layout = new Layout();
         events = new Events();
 
+    }
+
+    private void switchToHistory(String className){
+        Intent intent;
+
+        switch (className){
+            case "History":
+                Log.i(TAG, "Switch activity to history");
+                intent = new Intent(MainActivity.this, HistoryActivity.class);
+                startActivity(intent);
+                break;
+            case "Settings":
+                Log.i(TAG, "Switch activity to settings");
+                //intent = new Intent(MainActivity.this, SettingsActivity.class);
+                //startActivity(intent);
+                break;
+        }
     }
 
 }
