@@ -17,11 +17,12 @@ public class MainActivity extends Activity {
 
         Button btnSnd;
         Button btnHistory;
+        Button btnSettings;
 
         private Layout(){
-
             btnSnd = (Button)findViewById(R.id.btnSMS);
             btnHistory = (Button)findViewById(R.id.btnHistory);
+            btnSettings = (Button)findViewById(R.id.btnSettings);
 
         }
 
@@ -45,6 +46,12 @@ public class MainActivity extends Activity {
                     Log.i(TAG, "History button has been clicked");
                 }
             });
+            layout.btnSettings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i(TAG, "Setting button was clicked");
+                }
+            });
         }
     }
 
@@ -56,14 +63,14 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initilize();
+        initObjects();
 
         //Check if the database is exist
         //If yes, load the data
         //If not create the data base
     }
 
-    private void initilize(){
+    private void initObjects(){
 
         layout = new Layout();
         events = new Events();
