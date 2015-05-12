@@ -15,9 +15,8 @@ public class HistoryActivity extends Activity {
 
     private final String TAG = "DekelMain";
 
-    HistoryData mHistoryData;
+    private SqliteDataHandler mDataHandler;
     private List<String> contactsData;
-    String[] contactsHistory;
     ListView listViewHistory;
     ListAdapter adapter;
 
@@ -26,17 +25,12 @@ public class HistoryActivity extends Activity {
     }
 
     private void initAdapter() {
-
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, contactsHistory);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mDataHandler.getContactArray());
         listViewHistory.setAdapter(adapter);
-
     }
 
     private void init() {
-        mHistoryData = new HistoryData();
-        contactsHistory = new String[mHistoryData.getFullList().size()];
-        contactsHistory = mHistoryData.getFullList().toArray(contactsHistory);
-
+        mDataHandler = new SqliteDataHandler();
     }
 
     @Override
