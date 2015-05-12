@@ -5,8 +5,10 @@ package com.example.dekel.goodworld;
  */
 public class DatabaseInfo {
 
+    public static final int DATABASE_VERSION = 1;
     public static final String USER_NAME = "user_name";
     public static final String USER_NUM = "user_number";
+    public static final String USER_MSG = "user_message";
     public static final String DATABASE_NAME = "good_world";
     public static final String TABLE_NAME = "massages";
 
