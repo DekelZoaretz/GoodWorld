@@ -11,12 +11,11 @@ import java.util.List;
 public class HistoryData {
 
     private List<String> list;
-    private HashMap<String, String> contactHistory;
+    private String[] contactsHistory;
 
     public HistoryData(){
 
         list = new ArrayList<String>();
-        contactHistory = new HashMap<String, String>();
     }
 
     public void addToList(String contact, int sumOfMsg){
@@ -26,6 +25,11 @@ public class HistoryData {
     public List<String> getFullList(){
 
         return list;
+    }
+    public String[] getContactArray(){
+        contactsHistory = new String[getFullList().size()];
+        contactsHistory = getFullList().toArray(contactsHistory);
+        return contactsHistory;
     }
 
 }
