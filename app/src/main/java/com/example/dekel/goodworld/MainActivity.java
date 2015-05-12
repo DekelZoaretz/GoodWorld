@@ -11,6 +11,11 @@ import android.widget.Button;
 
 public class MainActivity extends Activity {
 
+    public enum Screens{
+        HISTORY, SETTINGS;
+    }
+    public Screens screen;
+
     private final String TAG = "DekelMain";
     Context context;
 
@@ -45,13 +50,14 @@ public class MainActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     Log.i(TAG, "History button has been clicked");
-                    switchToHistory("History");
+                    switchToActivity(Screens.HISTORY);
                 }
             });
             layout.btnSettings.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.i(TAG, "Setting button was clicked");
+                    switchToActivity(Screens.SETTINGS);
                 }
             });
         }
@@ -79,16 +85,16 @@ public class MainActivity extends Activity {
 
     }
 
-    private void switchToHistory(String className){
+    private void switchToActivity(Screens screen){
         Intent intent;
 
-        switch (className){
-            case "History":
+        switch (screen){
+            case HISTORY:
                 Log.i(TAG, "Switch activity to history");
                 intent = new Intent(MainActivity.this, HistoryActivity.class);
                 startActivity(intent);
                 break;
-            case "Settings":
+            case SETTINGS:
                 Log.i(TAG, "Switch activity to settings");
                 //intent = new Intent(MainActivity.this, SettingsActivity.class);
                 //startActivity(intent);
