@@ -19,13 +19,15 @@ public class HistoryActivity extends Activity {
 
     ListView listViewHistory;
     ListAdapter adapter;
-    DatabaseOperations dbOperations;
-    Context context;
+    HistoryContactsDataSource dataSource;
+
 
     public HistoryActivity() {
 //      Loading contactsData from the database
-        dbOperations = new DatabaseOperations(context);
-        dbOperations.loadContactsAndSumFromDatabase();
+        Log.i(TAG, "Start creating the database");
+        dataSource = new HistoryContactsDataSource(this.getApplicationContext());
+        Log.i(TAG,"Start loading the data");
+        dataSource.loadContactsAndSumFromDatabase();
         Log.i(TAG, "Finished loading the data");
     }
 
