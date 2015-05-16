@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class HistoryActivity extends Activity {
 
-    private final String TAG = "DekelMain";
+    private final String TAG = "History Activity";
 
     ListView listViewHistory;
     ListAdapter adapter;

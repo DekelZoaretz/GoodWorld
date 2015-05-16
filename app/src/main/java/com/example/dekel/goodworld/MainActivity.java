@@ -16,7 +16,7 @@ public class MainActivity extends Activity {
     }
     public Screens screen;
 
-    private final String TAG = "DekelMain";
+    private final String TAG = "Main Activity";
 
     class Layout{
 
