@@ -1,7 +1,9 @@
 package com.example.dekel.goodworld;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -15,23 +17,24 @@ public class HistoryActivity extends Activity {
 
     private final String TAG = "DekelMain";
 
-    private SqliteDataHandler mDataHandler;
-    private List<String> contactsData;
     ListView listViewHistory;
     ListAdapter adapter;
+    DatabaseOperations dbOperations;
+    Context context;
 
     public HistoryActivity() {
-        init();
+//      Loading contactsData from the database
+        dbOperations = new DatabaseOperations(context);
+        dbOperations.loadContactsAndSumFromDatabase();
+        Log.i(TAG, "Finished loading the data");
     }
 
     private void initAdapter() {
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mDataHandler.getContactArray());
+        Log.i(TAG, "Initializing the adapter for the list view");
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getContactArray());
         listViewHistory.setAdapter(adapter);
     }
 
-    private void init() {
-        mDataHandler = new SqliteDataHandler();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,5 +42,11 @@ public class HistoryActivity extends Activity {
         setContentView(R.layout.history_layout);
         listViewHistory = (ListView)findViewById(R.id.listviewHistory);
         initAdapter();
+    }
+
+    public String[] getContactArray(){
+        String[] contactsHistory = new String[DatabaseInfo.contactsData.size()];
+        contactsHistory = DatabaseInfo.contactsData.toArray(contactsHistory);
+        return contactsHistory;
     }
 }

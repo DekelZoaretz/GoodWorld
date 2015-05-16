@@ -17,7 +17,6 @@ public class MainActivity extends Activity {
     public Screens screen;
 
     private final String TAG = "DekelMain";
-    Context context;
 
     class Layout{
 
@@ -72,10 +71,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initObjects();
-
-        //Check if the database is exist
-        //If yes, load the data
-        //If not create the data base
     }
 
     private void initObjects(){
