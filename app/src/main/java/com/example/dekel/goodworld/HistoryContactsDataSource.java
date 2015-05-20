@@ -1,15 +1,17 @@
 package com.example.dekel.goodworld;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -17,15 +19,13 @@ import java.util.Set;
  */
 public class HistoryContactsDataSource {
 
-    public Context mContext;
     public DatabaseOperations mOperations;
-    Set<String> set;
+    HashMap<String, Integer> map;
     private final String TAG = "Contacts DataSource";
 
     public HistoryContactsDataSource(Context context) {
 
         Log.i(TAG, "Constructor");
-        mContext = context;
         mOperations = new DatabaseOperations(context);
         SQLiteDatabase db = mOperations.getReadableDatabase();
         db.close();
@@ -40,8 +40,9 @@ public class HistoryContactsDataSource {
 
     public void loadContactsAndSumFromDatabase(){
         List<String> mList = new ArrayList<String>();
-        set = new HashSet<>();
+        map = new HashMap<String, Integer>();
         String currentName = "";
+        Integer sum = 0;
 //        Getting the data (USERNAME) from the database and load it to contactsData
         SQLiteDatabase db = open();
         Cursor cursor = db.query(DatabaseInfo.TABLE_NAME,
@@ -55,18 +56,19 @@ public class HistoryContactsDataSource {
             do{
                 currentName = getStringFromColumnName(cursor, DatabaseInfo.COLUMN_USER_NAME);
                 mList.add(currentName);
-                if (!set.contains(currentName)) {
-                    set.add(currentName);
+
+                if(!map.containsKey(currentName)){
+                    map.put(currentName, sum);
+                }else{
+                    map.put(currentName, map.get(currentName)+1);
                 }
             }while(cursor.moveToNext());
         }
         cursor.close();
         close(db);
 
-        int occurrences;
-        for(String name : set){
-            occurrences = Collections.frequency(mList, name);
-            DatabaseInfo.contactsData.add(name + " (" + String.valueOf(occurrences) + ")");
+        for(Map.Entry<String,Integer> entry : map.entrySet()){
+            DatabaseInfo.contactsData.add(entry.getKey() + " (" + String.valueOf(entry.getValue()) + ")");
         }
     }
 
@@ -75,5 +77,33 @@ public class HistoryContactsDataSource {
     private String getStringFromColumnName(Cursor cursor, String columnName){
         int columnIndex = cursor.getColumnIndex(columnName);
         return cursor.getString(columnIndex);
+    }
+
+    public void insertDataToDatabase(SmsInfo info){
+
+        SQLiteDatabase database = open();
+        database.beginTransaction();
+
+        ContentValues userValues = new ContentValues();
+        userValues.put(DatabaseInfo.COLUMN_USER_NAME, info.getUsername());
+        userValues.put(DatabaseInfo.COLUMN_USER_MSG, info.getMessage());
+        userValues.put(DatabaseInfo.COLUMN_USER_NUM, info.getUserNumberAsString());
+        long userID = database.insert(DatabaseInfo.TABLE_NAME, null, userValues);
+
+        database.setTransactionSuccessful();
+        database.endTransaction();
+        close(database);
+
+    }
+
+    public void deleteDataFromDatabase(){
+        SQLiteDatabase database = open();
+        database.beginTransaction();
+
+        //database.delete(DatabaseInfo.TABLE_NAME, String.format("%s=%s",DatabaseInfo.COLUMN_USER_NAME, DatabaseInfo.user_name),null);
+
+        database.setTransactionSuccessful();
+        database.endTransaction();
+        database.close();
     }
 }
