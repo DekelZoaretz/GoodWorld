@@ -20,8 +20,4 @@ public class DatabaseInfo {
 
 //    List of Contacts with their sum of sms messages
         public static List<String> contactsData = new ArrayList<String>();
-
-
-
-
 }
