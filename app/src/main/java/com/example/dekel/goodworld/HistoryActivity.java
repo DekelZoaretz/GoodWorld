@@ -20,16 +20,7 @@ public class HistoryActivity extends Activity {
     ListView listViewHistory;
     ListAdapter adapter;
     HistoryContactsDataSource dataSource;
-
-
-    public HistoryActivity() {
-//      Loading contactsData from the database
-        Log.i(TAG, "Start creating the database");
-        dataSource = new HistoryContactsDataSource(this.getApplicationContext());
-        Log.i(TAG,"Start loading the data");
-        dataSource.loadContactsAndSumFromDatabase();
-        Log.i(TAG, "Finished loading the data");
-    }
+    Context context;
 
     private void initAdapter() {
         Log.i(TAG, "Initializing the adapter for the list view");
@@ -43,7 +34,16 @@ public class HistoryActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.history_layout);
         listViewHistory = (ListView)findViewById(R.id.listviewHistory);
+        initDatabase(getApplicationContext());
         initAdapter();
+    }
+
+    private void initDatabase(Context context){
+        Log.i(TAG, "Start creating the database");
+        dataSource = new HistoryContactsDataSource(context);
+        Log.i(TAG,"Start loading the data");
+        dataSource.loadContactsAndSumFromDatabase();
+        Log.i(TAG, "Finished loading the data");
     }
 
     public String[] getContactArray(){
