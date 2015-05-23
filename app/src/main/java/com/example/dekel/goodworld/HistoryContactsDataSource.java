@@ -39,7 +39,6 @@ public class HistoryContactsDataSource {
     }
 
     public void loadContactsAndSumFromDatabase(){
-        List<String> mList = new ArrayList<String>();
         map = new HashMap<String, Integer>();
         String currentName = "";
         Integer sum = 0;
@@ -55,7 +54,6 @@ public class HistoryContactsDataSource {
         if(cursor.moveToFirst()){
             do{
                 currentName = getStringFromColumnName(cursor, DatabaseInfo.COLUMN_USER_NAME);
-                mList.add(currentName);
 
                 if(!map.containsKey(currentName)){
                     map.put(currentName, sum);
