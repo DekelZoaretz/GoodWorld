@@ -1,7 +1,9 @@
 package com.example.dekel.goodworld;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -19,12 +21,18 @@ public class MainActivity extends Activity {
 
     HistoryContactsDataSource dataSource;
     private static final int PICK_CONTACT_REQUEST = 1;
+    private SmsInfo smsInfo;
 
     private enum Screens{
         HISTORY, SETTINGS;
     }
 
+    public MainActivity(){
+        smsInfo = new SmsInfo();
+    }
+
     private final String TAG = "Main Activity";
+
 
     class Layout{
 
@@ -36,6 +44,7 @@ public class MainActivity extends Activity {
         EditText etMessage;
         TextView tvName;
         Button btnClean;
+        Button btnClearDatabase;
 
 
         private Layout(){
@@ -47,6 +56,7 @@ public class MainActivity extends Activity {
             etMessage = (EditText)findViewById(R.id.etMessage);
             tvName = (TextView)findViewById(R.id.tvName);
             btnClean = (Button)findViewById(R.id.btnClean);
+            btnClearDatabase = (Button)findViewById(R.id.btnClear);
 
         }
     }
@@ -55,6 +65,14 @@ public class MainActivity extends Activity {
 
 
         private Events(){
+
+            layout.btnClearDatabase.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dataSource.deleteDataFromDatabase();
+                    Toast.makeText(getApplicationContext(), "Your history has been deleted", Toast.LENGTH_LONG).show();
+                }
+            });
 
             layout.btnChoose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -81,9 +99,13 @@ public class MainActivity extends Activity {
                         Toast.makeText(getBaseContext(), "Please enter both number and message", Toast.LENGTH_LONG).show();
                     }else {
                         Log.i(TAG, "Number and message are not empty");
+                        String number = removeExtras(layout.etNumber.getText().toString());
+
+                        Log.i(TAG, "the number is: " + number);
                         sendMessage(layout.tvName.getText().toString(),
-                                layout.etNumber.getText().toString(),
-                                layout.etMessage.getText().toString());
+                                    number,
+                                    layout.etMessage.getText().toString());
+                        showAlertDialog(MainActivity.this);
                     }
                 }
             });
@@ -106,6 +128,17 @@ public class MainActivity extends Activity {
         }
     }
 
+    private String removeExtras(String number) {
+
+        number = number.trim();
+        number = number.replace("(","");
+        number = number.replace(")", "");
+        number = number.replace("-","");
+        number = number.replace(" ","");
+
+        return  number;
+    }
+
     Layout layout;
     Events events;
 
@@ -115,6 +148,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initObjects();
+        dataSource = new HistoryContactsDataSource(getApplicationContext());
     }
 
     private void initObjects(){
@@ -140,7 +174,24 @@ public class MainActivity extends Activity {
     }
 
     private void sendMessage(String name, String number, String message){
+        smsInfo.setUsername(name);
+        smsInfo.setUserNumber(number);
+        smsInfo.setMessage(message);
+        Log.i(TAG, "Inserting data into database");
+        dataSource.insertDataToDatabase(smsInfo);
+        Log.i(TAG, "recipient data has been inserted into database");
+        layout.tvName.setText("");
+        layout.etNumber.setText("");
+        layout.etMessage.setText("");
 
+        //SendingMessage.instance().sendSMS(getBaseContext(),number,message);
+    }
+    private void showAlertDialog(Context context){
+        new AlertDialog.Builder(context)
+                .setTitle("Great job!!!")
+                .setMessage("you have just made someone feel really good!\n keep on the great work")
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .show();
     }
 
     private void pickContact() {
