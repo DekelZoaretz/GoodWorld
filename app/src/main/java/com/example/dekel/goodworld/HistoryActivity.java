@@ -33,6 +33,7 @@ public class HistoryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.history_layout);
+        DatabaseInfo.contactsData.clear();
         listViewHistory = (ListView)findViewById(R.id.listviewHistory);
         initDatabase(getApplicationContext());
         initAdapter();
