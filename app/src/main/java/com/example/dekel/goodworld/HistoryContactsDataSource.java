@@ -66,7 +66,7 @@ public class HistoryContactsDataSource {
         close(db);
 
         for(Map.Entry<String,Integer> entry : map.entrySet()){
-            DatabaseInfo.contactsData.add(entry.getKey() + " (" + String.valueOf(entry.getValue()) + ")");
+            DatabaseInfo.addContactsData(entry.getKey() + " (" + String.valueOf(entry.getValue()) + ")");
         }
     }
 
