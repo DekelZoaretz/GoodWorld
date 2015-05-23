@@ -8,8 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import java.util.List;
-
 /**
  * Created by Dekel on 5/10/2015.
  */
@@ -33,7 +31,7 @@ public class HistoryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.history_layout);
-        DatabaseInfo.contactsData.clear();
+        DatabaseInfo.clearListData();
         listViewHistory = (ListView)findViewById(R.id.listviewHistory);
         initDatabase(getApplicationContext());
         initAdapter();
@@ -48,8 +46,8 @@ public class HistoryActivity extends Activity {
     }
 
     public String[] getContactArray(){
-        String[] contactsHistory = new String[DatabaseInfo.contactsData.size()];
-        contactsHistory = DatabaseInfo.contactsData.toArray(contactsHistory);
+        String[] contactsHistory = new String[DatabaseInfo.getContactsData().size()];
+        contactsHistory = DatabaseInfo.getContactsData().toArray(contactsHistory);
         return contactsHistory;
     }
 }
