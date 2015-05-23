@@ -41,7 +41,7 @@ public class HistoryContactsDataSource {
     public void loadContactsAndSumFromDatabase(){
         map = new HashMap<String, Integer>();
         String currentName = "";
-        Integer sum = 0;
+        Integer sum = 1;
 //        Getting the data (USERNAME) from the database and load it to contactsData
         SQLiteDatabase db = open();
         Cursor cursor = db.query(DatabaseInfo.TABLE_NAME,
@@ -85,7 +85,7 @@ public class HistoryContactsDataSource {
         ContentValues userValues = new ContentValues();
         userValues.put(DatabaseInfo.COLUMN_USER_NAME, info.getUsername());
         userValues.put(DatabaseInfo.COLUMN_USER_MSG, info.getMessage());
-        userValues.put(DatabaseInfo.COLUMN_USER_NUM, info.getUserNumberAsString());
+        userValues.put(DatabaseInfo.COLUMN_USER_NUM, info.getUserNumber());
         long userID = database.insert(DatabaseInfo.TABLE_NAME, null, userValues);
 
         database.setTransactionSuccessful();
@@ -98,7 +98,7 @@ public class HistoryContactsDataSource {
         SQLiteDatabase database = open();
         database.beginTransaction();
 
-        //database.delete(DatabaseInfo.TABLE_NAME, String.format("%s=%s",DatabaseInfo.COLUMN_USER_NAME, DatabaseInfo.user_name),null);
+        database.delete(DatabaseInfo.TABLE_NAME, null, null);
 
         database.setTransactionSuccessful();
         database.endTransaction();
