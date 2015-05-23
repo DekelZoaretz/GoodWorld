@@ -7,7 +7,7 @@ public class SmsInfo {
 
     private String message = "";
     private String username = "";
-    private int userNumber;
+    private String userNumber;
 
 
     public String getMessage() {
@@ -26,15 +26,11 @@ public class SmsInfo {
         this.username = username;
     }
 
-    public int getUserNumber() {
+    public String getUserNumber() {
         return userNumber;
     }
-    public String getUserNumberAsString() {
 
-        return String.valueOf(userNumber);
-    }
-
-    public void setUserNumber(int userNumber) {
+    public void setUserNumber(String userNumber) {
         this.userNumber = userNumber;
     }
 }
