@@ -88,4 +88,12 @@
         android:layout_alignEnd="@+id/btnSettings"
         android:layout_toRightOf="@+id/etPhoneNumber"
         android:layout_toEndOf="@+id/etPhoneNumber" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear history"
+        android:id="@+id/btnClear"
+        android:layout_above="@+id/btnHistory"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
