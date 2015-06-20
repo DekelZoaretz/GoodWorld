@@ -18,6 +18,9 @@ public class DatabaseInfo {
         public static final String COLUMN_USER_NUM = "user_number";
         public static final String COLUMN_USER_MSG = "user_message";
 
+    //    List of Contacts with their sum of sms messages
+    private static List<String> contactsData = new ArrayList<String>();
+
     public static List<String> getContactsData() {
         return contactsData;
     }
@@ -31,6 +34,5 @@ public class DatabaseInfo {
         DatabaseInfo.contactsData.clear();
     }
 
-    //    List of Contacts with their sum of sms messages
-        private static List<String> contactsData = new ArrayList<String>();
+
 }
