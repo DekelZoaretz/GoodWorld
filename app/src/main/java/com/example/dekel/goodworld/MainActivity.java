@@ -1,7 +1,12 @@
 package com.example.dekel.goodworld;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +19,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 
 public class MainActivity extends Activity {
@@ -22,6 +30,9 @@ public class MainActivity extends Activity {
     HistoryContactsDataSource dataSource;
     private static final int PICK_CONTACT_REQUEST = 1;
     private SmsInfo smsInfo;
+    private int mMinute;
+    private int mHour;
+
 
     private enum Screens{
         HISTORY, SETTINGS;
@@ -64,7 +75,7 @@ public class MainActivity extends Activity {
     class Events{
 
 
-        private Events(){
+    private Events(){
 
             layout.btnClearDatabase.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -142,13 +153,18 @@ public class MainActivity extends Activity {
     Layout layout;
     Events events;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initObjects();
         dataSource = new HistoryContactsDataSource(getApplicationContext());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //notifyManager.cancel(NOTIFY_ID);
     }
 
     private void initObjects(){
@@ -167,12 +183,32 @@ public class MainActivity extends Activity {
                 break;
             case SETTINGS:
                 Log.i(TAG, "Switch activity to settings");
-                //intent = new Intent(MainActivity.this, SettingsActivity.class);
-                //startActivity(intent);
+                popDialog();
                 break;
         }
     }
 
+    private void popDialog() {
+
+        final Calendar calendar = Calendar.getInstance();
+        mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = calendar.get(Calendar.MINUTE);
+
+        // Launch Time Picker Dialog
+        TimePickerDialog tpd = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hour,
+                                          int minute) {
+//                        Set the time of the notification
+                        setNotification(hour,minute,0);
+                    }
+                }, mHour, mMinute, false);
+
+        tpd.show();
+
+    }
     private void sendMessage(String name, String number, String message){
         smsInfo.setUsername(name);
         smsInfo.setUserNumber(number);
@@ -184,8 +220,9 @@ public class MainActivity extends Activity {
         layout.etNumber.setText("");
         layout.etMessage.setText("");
 
-        //SendingMessage.instance().sendSMS(getBaseContext(),number,message);
+//        SendingMessage.instance().sendSMS(getBaseContext(),number,message);
     }
+
     private void showAlertDialog(Context context){
         new AlertDialog.Builder(context)
                 .setTitle("Great job!!!")
@@ -225,5 +262,16 @@ public class MainActivity extends Activity {
                 layout.tvName.setText(name);
             }
         }
+    }
+
+    private void setNotification(int hour, int minute, int second){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,hour);
+        calendar.set(Calendar.MINUTE,minute);
+        calendar.set(Calendar.SECOND, second);
+        Intent intent = new Intent(MainActivity.this, AlarmReciever.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 }
